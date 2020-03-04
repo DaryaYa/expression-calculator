@@ -10,13 +10,13 @@ function expressionCalculator(expr) {
         throw new Error();
     };
 
-    let arr = expr.trim().split(' ');
-    arr = arr.filter(item => item !== '');
-    // let str = arr.join('');
+   let regexp = /[-+*\/()]|\d+/g;
+   let arr = expr.match(regexp);
+  
 // console.log(arr);
-   if (arr.filter(item => item =='(' || item ==')').length % 2 !== 0) {
+   if (arr.filter(item => item =='(').length !== arr.filter(item => item ==')').length) {
 
-       throw new Error();
+       throw new Error('ExpressionError: Brackets must be paired');
    } ;
 // console.log(arr);
   let numStack = [];
@@ -34,14 +34,14 @@ function expressionCalculator(expr) {
 
    function calculate(a, op, b) {
 // console.log(op);
-    if (op === '/' && Number(b) === 0) throw new Error("TypeError: Division by zero");
+    if (op === '/' && Number(b) === 0) throw new Error("TypeError: Division by zero.");
     if (op === '-') return Number(a) - Number(b);
     else if (op === '+') return Number(a) + Number(b);
     else if (op === '/') return Number(a) / Number(b);
     else if (op === '*') return Number(a) * Number(b);
   };
    
-  while (arr.length !== 0 || operators.length !== 0) {
+  while (operators != 0 || arr.length != 0) {
       let token = arr[0];
 // console.log(token);
     if (!isNaN(token)) {
@@ -71,170 +71,30 @@ function expressionCalculator(expr) {
       operators.pop();
   }
   }
-  return +result.toFixed(4);
+    // for (let i = 0; i < arr.length; i++) {
+    // if (!isNaN(arr[i])) {
+    //     numStack.push(arr[i]); 
+    // } else if (arr[i] === ')') {
+    //     while (operators[operators.length - 1] !== '(') {
+    //     result = calculate(numStack[numStack.length - 2], operators[operators.length - 1], numStack[numStack.length - 1]);
+    //     numStack = numStack.slice(0, -2);
+    //     numStack.push(result);
+    //     operators.pop();
+    //     } 
+    //     operators.pop();
+    // } else if (priority[arr[i]] > priority[operators[operators.length-1]] || arr[i] === '(' || operators.length == 0) {
+    //     operators.push(arr[i]);
+    // } else {
+    //     result = calculate(numStack[numStack.length - 2], operators[operators.length-1], numStack[numStack.length - 1]);
+    //     numStack = numStack.slice(0, -2);
+    //     numStack.push(result);
+    //     operators.pop();
+    //     operators.push(arr[i]);
+        
+    // }    
+    // }
+  return result;
 }
-
-//     if (expr.length == 0) {return false};
-
-//     let arr = expr.trim().split(' ');
-//     arr = arr.filter(item => item !== '');
-//     // let str = arr.join('');
-
-//    if (arr.filter(item => item =='(' || item ==')').length % 2 !== 0) {
-
-//        throw new Error();
-//    } ;
-
-//   let numStack = [];
-//   let operators = [];
-//   let result = 0;
-//   const priority = {
-       
-//     '+': 2,
-//     '-': 2,
-//     '*': 3,
-//     '/': 3,
-//     '(': 1,
-//     ')': 1
-//    };
-
-//    function calculate(a, op, b) {
-
-//     if (op === '/' && Number(b) === 0) throw new Error("TypeError: Division by zero");
-//     if (op === '-') return Number(a) - Number(b);
-//     else if (op === '+') return Number(a) + Number(b);
-//     else if (op === '/') return Number(a) / Number(b);
-//     else if (op === '*') return Number(a) * Number(b);
-//   };
-   
-//   while (arr.length !== 0 || operators.length !== 0) {
-//       let token = arr[0];
-
-//     if (!isNaN(token)) {
-//         numStack.push(token); 
-//         arr.shift()
-//     } else if (str[i] === ')') {
-//       while (operators[operators.length - 1] !== '(') {
-//         result = calculate(numStack[numStack.length - 2], operators[operators.length - 1], numStack[numStack.length - 1]);
-//         numStack = numStack.slice(0, -2);
-//         numStack.push(result);
-//         operators.pop();
-//       }
-//       operatorStack.pop();
-//      arr.shift();
-
-//   } 
-//     else if (priority[token] > priority[operators[operators.length-1]] || token === '(' || operators.length == 0 || numStack.length < 1) {
-//     operators.push(token);
-//     arr.shift();
-//   } else {
-//       result = calculate(numStack[numStack.length - 2], operators[operators.length-1], numStack[numStack.length - 1]);
-//       numStack = numStack.slice(0, -2);
-//       numStack.push(result);
-//       operators.pop();
-//   }
-//   }
-//   return +result.toFixed(4);
-
-//     for (let i = 0; i < str.length-1; i++) {
-//         if (!isNaN(str[i])) {
-//             numStack.push(str[i]);
-//         } else if (isNaN(str[i])) {
-//             while (priority[operators[operators.length-1]] >= priority[str[i]] && operators[operators.length-1] !== '(') {
-//                 numStack.push(operators.pop());
-//             } 
-//             operators.push(str[i]);
-//         }
-//         else if (str[i] === '(') {
-//             operators.push(str[i]);
-//         }
-//         else if (str[i] === ')') {
-//             while (operators[operators.length - 1] !== '(') {
-//                 numStack.push(operators.pop())
-//             } if (operators[operators.length - 1] === '(') {
-//                 operators.pop();
-//             }
-//         }
-//     };
-
-//     // while (operators.length !== 0) {
-//     //     numStack.push(operators.pop());
-//     // }
-
-//     function calculate(numStack) {
-        
-//         let result = [];
-
-//         for (let j = 0; j < numStack.length; j++) {
-
-//              if (!isNaN(str[i])) {
-//             result.push(numStack[j]);           
-//         }
-
-//         switch (num[j]) {
-//             case '/':
-                
-//                 break;
-//             case '*':
-
-//             default:
-//                 break;
-//         }
-//         }
-       
-//     }
-
-// }
-
-//    function findBrackets(expr) {
-
-//     if (expr.includes('(')) {
-//         let startInd = expr.lastIndexOf('(');
-//         let endInd = expr.indexOf(')');
-//         let brackets = expr.slice(startInd+1, endInd);
-//         let bracketsRes = calculate(brackets);
-
-//         expr = expr.replace(`(${brackets})`, bracketsRes);
-        
-//         return findBrackets(expr);
-
-//     } else {
-//        return calculate(expr)
-//     }
-   
-//     return 
-//    }
-
-//    function calculate(arr) {
-
-//        let arrResult = [];
-
-//        for ( let i = 0; i < arr.length; i++ ) {
-
-//       if (arr[i] === '*') {
-//         arrResult[arrResult.length - 1] = arrResult[arrResult.length - 1] * arr[i + 1];
-//         i++;
-
-//       } else if (arr[i] === '/') {
-
-//         if (arr[i + 1] == 0) {
-//           throw("TypeError: Division by zero");
-//         };
-
-//         arrResult[arrResult.length - 1] = arrResult[arrResult.length - 1] / arr[i + 1];
-//         i++;
-
-//       } else {
-//         arrResult.push(arr[i]);
-//       }
-//     };
-
-//    }
-   
-   
-
-
-
 
 module.exports = {
     expressionCalculator
