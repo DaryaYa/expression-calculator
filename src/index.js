@@ -5,17 +5,20 @@ function eval() {
 
 function expressionCalculator(expr) {
 
-    if (expr.length == 0) {return false};
+    
+    if (expr.length == 0) {
+        throw new Error();
+    };
 
     let arr = expr.trim().split(' ');
     arr = arr.filter(item => item !== '');
-    let str = arr.join('');
-
+    // let str = arr.join('');
+// console.log(arr);
    if (arr.filter(item => item =='(' || item ==')').length % 2 !== 0) {
 
        throw new Error();
-   } 
-
+   } ;
+// console.log(arr);
   let numStack = [];
   let operators = [];
   let result = 0;
@@ -27,8 +30,112 @@ function expressionCalculator(expr) {
     '/': 3,
     '(': 1,
     ')': 1
-   }
+   };
+
+   function calculate(a, op, b) {
+// console.log(op);
+    if (op === '/' && Number(b) === 0) throw new Error("TypeError: Division by zero");
+    if (op === '-') return Number(a) - Number(b);
+    else if (op === '+') return Number(a) + Number(b);
+    else if (op === '/') return Number(a) / Number(b);
+    else if (op === '*') return Number(a) * Number(b);
+  };
+   
+  while (arr.length !== 0 || operators.length !== 0) {
+      let token = arr[0];
+// console.log(token);
+    if (!isNaN(token)) {
+        numStack.push(token); 
+        arr.shift()
+    }  else if (token === ')') {
+       while (operators[operators.length - 1] !== '(') {
+         result = calculate(numStack[numStack.length - 2], operators[operators.length - 1], numStack[numStack.length - 1]);
+// console.log(result);
+         numStack = numStack.slice(0, -2);
+         numStack.push(result);
+         operators.pop();
+       }
+       operators.pop();
+      arr.shift();
+
+   } 
+
+    else if (priority[token] > priority[operators[operators.length-1]] || token === '(' || operators.length == 0 || numStack.length < 1) {
+// console.log(token);
+    operators.push(token);
+    arr.shift();
+  } else {
+      result = calculate(numStack[numStack.length - 2], operators[operators.length-1], numStack[numStack.length - 1]);
+      numStack = numStack.slice(0, -2);
+      numStack.push(result);
+      operators.pop();
+  }
+  }
+  return +result.toFixed(4);
 }
+
+//     if (expr.length == 0) {return false};
+
+//     let arr = expr.trim().split(' ');
+//     arr = arr.filter(item => item !== '');
+//     // let str = arr.join('');
+
+//    if (arr.filter(item => item =='(' || item ==')').length % 2 !== 0) {
+
+//        throw new Error();
+//    } ;
+
+//   let numStack = [];
+//   let operators = [];
+//   let result = 0;
+//   const priority = {
+       
+//     '+': 2,
+//     '-': 2,
+//     '*': 3,
+//     '/': 3,
+//     '(': 1,
+//     ')': 1
+//    };
+
+//    function calculate(a, op, b) {
+
+//     if (op === '/' && Number(b) === 0) throw new Error("TypeError: Division by zero");
+//     if (op === '-') return Number(a) - Number(b);
+//     else if (op === '+') return Number(a) + Number(b);
+//     else if (op === '/') return Number(a) / Number(b);
+//     else if (op === '*') return Number(a) * Number(b);
+//   };
+   
+//   while (arr.length !== 0 || operators.length !== 0) {
+//       let token = arr[0];
+
+//     if (!isNaN(token)) {
+//         numStack.push(token); 
+//         arr.shift()
+//     } else if (str[i] === ')') {
+//       while (operators[operators.length - 1] !== '(') {
+//         result = calculate(numStack[numStack.length - 2], operators[operators.length - 1], numStack[numStack.length - 1]);
+//         numStack = numStack.slice(0, -2);
+//         numStack.push(result);
+//         operators.pop();
+//       }
+//       operatorStack.pop();
+//      arr.shift();
+
+//   } 
+//     else if (priority[token] > priority[operators[operators.length-1]] || token === '(' || operators.length == 0 || numStack.length < 1) {
+//     operators.push(token);
+//     arr.shift();
+//   } else {
+//       result = calculate(numStack[numStack.length - 2], operators[operators.length-1], numStack[numStack.length - 1]);
+//       numStack = numStack.slice(0, -2);
+//       numStack.push(result);
+//       operators.pop();
+//   }
+//   }
+//   return +result.toFixed(4);
+
 //     for (let i = 0; i < str.length-1; i++) {
 //         if (!isNaN(str[i])) {
 //             numStack.push(str[i]);
